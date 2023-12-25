@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc/user_bloc.dart';
+import 'package:bloc_test/cubit/internet_cubit.dart';
 import 'package:bloc_test/pages/home_page.dart';
 import 'package:bloc_test/services/user_repository.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BlocProvider(
-        create: (context) =>
-            UserBloc(userRepository: UserRepository())..add(UserLoadEvent()),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => UserBloc(userRepository: UserRepository())
+              ..add(UserLoadEvent()),
+          ),
+          BlocProvider(create: (context) => ConnectionCubit())
+        ],
         child: const HomePage(),
       ),
     );
